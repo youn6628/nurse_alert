@@ -306,6 +306,54 @@ document.getElementById("radius")
   .addEventListener("change", loadServerJobs);
 
 </script>
+<hr>
 
+<h2>🔔 알림 설정</h2>
+
+<button id="enable-notifications"
+  style="padding:15px; font-size:18px;
+         background:#2563eb; color:white;
+         border:0; border-radius:10px;">
+  알림 허용하기
+</button>
+
+<p id="notification-status"></p>
+
+<script>
+const notificationStatus =
+  document.getElementById("notification-status");
+
+// 알림 처리 파일 등록
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js")
+    .catch(error => {
+      notificationStatus.textContent =
+        "❌ 알림 파일 등록 실패: " + error.message;
+    });
+}
+
+// 알림 권한 요청
+document.getElementById("enable-notifications")
+  .addEventListener("click", async () => {
+
+    if (!("Notification" in window) ||
+        !("serviceWorker" in navigator)) {
+      notificationStatus.textContent =
+        "❌ 이 브라우저에서는 알림을 지원하지 않습니다.";
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+
+    if (permission === "granted") {
+      notificationStatus.textContent =
+        "✅ 알림 권한이 허용되었습니다!";
+    } else {
+      notificationStatus.textContent =
+        "⚠️ 알림 권한이 허용되지 않았습니다.";
+    }
+
+  });
+</script>
 </body>
 </html>
