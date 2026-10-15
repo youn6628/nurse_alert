@@ -54,12 +54,23 @@
 <script>
   // 테스트용 가상 채용공고
   const jobs = [
-    { name: "가상 A병원", distance: 8, days: "월/수" },
-    { name: "가상 B병원", distance: 18, days: "화/목" },
-    { name: "가상 C병원", distance: 25, days: "월/금" },
-    { name: "가상 D병원", distance: 35, days: "수/목" }
-  ];
+  { name: "가상 A병원", distance: 8, days: "월/수" },
+  { name: "가상 B병원", distance: 18, days: "화/목" },
+  { name: "가상 C병원", distance: 25, days: "월/금" },
+  { name: "가상 D병원", distance: 35, days: "수/목" },
+  { name: "가상 E병원", distance: 12, days: "토/일" },
+  { name: "가상 F병원", distance: 15, days: "월/수/금" }
+];
+  function isWeekdayTwice(days) {
+  const workdays = days.split("/");
+  const weekdays = ["월", "화", "수", "목", "금"];
 
+  return (
+    workdays.length === 2 &&
+    workdays[0] !== workdays[1] &&
+    workdays.every(day => weekdays.includes(day))
+  );
+}
   function showJobs() {
     const radius = Number(document.getElementById("radius").value);
     const jobList = document.getElementById("job-list");
