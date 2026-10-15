@@ -491,5 +491,86 @@ document.getElementById("register-push")
   });
 
 </script>
+  <hr>
+
+<h2>📱 알림 수신 기기 등록</h2>
+
+<input
+  type="password"
+  id="register-code"
+  placeholder="등록용 비밀번호"
+  style="padding:12px; border-radius:8px;"
+>
+
+<br><br>
+
+<button id="save-push"
+  style="padding:15px; background:#2563eb;
+         color:white; border:0; border-radius:10px;">
+  📱 서버에 휴대폰 등록하기
+</button>
+
+<p id="save-push-status"></p>
+
+<script>
+document.getElementById("save-push")
+  .addEventListener("click", async () => {
+
+    const status = document.getElementById("save-push-status");
+    const input = document.getElementById("register-code");
+    const code = input.value;
+
+    if (!code) {
+      status.textContent = "비밀번호를 입력해 주세요.";
+      return;
+    }
+
+    status.textContent = "⏳ 등록 중...";
+
+    try {
+
+      const registration = await navigator.serviceWorker.ready;
+
+      const subscription =
+        await registration.pushManager.getSubscription();
+
+      if (!subscription) {
+        throw new Error("먼저 휴대폰 푸시 구독을 생성해 주세요.");
+      }
+
+      const response = await fetch(
+        "https://nurse-alert-checker.youn6628.workers.dev/push/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            code: code,
+            subscription: subscription.toJSON()
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "등록 실패");
+      }
+
+      status.textContent = "✅ 휴대폰 서버 등록 성공!";
+
+    } catch (error) {
+
+      status.textContent = "❌ " + error.message;
+
+    } finally {
+
+      input.value = "";
+
+    }
+
+  });
+</script>
 </body>
 </html>
