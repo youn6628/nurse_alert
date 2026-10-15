@@ -35,9 +35,18 @@
   const newRadius = Number(radius.value);
 
   if (newRadius > oldRadius) {
+
+    // 이전 검색 반경 저장
     localStorage.setItem("oldRadius", oldRadius);
-  } else {
+
+    // 검색 반경을 확장한 시간 저장
+    localStorage.setItem("expandedAt", new Date().toISOString());
+
+  } else if (newRadius < oldRadius) {
+
     localStorage.removeItem("oldRadius");
+    localStorage.removeItem("expandedAt");
+
   }
 
   localStorage.setItem("radius", newRadius);
