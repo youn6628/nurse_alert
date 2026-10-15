@@ -163,9 +163,11 @@ async function loadServerJobs() {
 
   try {
 
-    const response = await fetch(
-      "https://nurse-alert-checker.youn6628.workers.dev"
-    );
+    const radius = document.getElementById("radius").value;
+
+const response = await fetch(
+  `https://nurse-alert-checker.youn6628.workers.dev/?radius=${radius}`
+);
 
     if (!response.ok) {
       throw new Error("서버 응답 오류: " + response.status);
@@ -225,6 +227,10 @@ async function loadServerJobs() {
 }
 
 loadServerJobs();
+
+document.getElementById("radius")
+  .addEventListener("change", loadServerJobs);
+
 </script>
 
 </body>
