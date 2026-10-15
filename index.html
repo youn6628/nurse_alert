@@ -85,6 +85,52 @@
 
   showJobs();
 </script>
+<div id="expanded-jobs"></div>
 
+<script>
+function showExpandedJobs() {
+  const current = Number(document.getElementById("radius").value);
+  const previous = Number(localStorage.getItem("oldRadius") || current);
+
+  const missedJobs = jobs.filter(job =>
+    job.distance > previous &&
+    job.distance <= current
+  );
+
+  const section = document.getElementById("expanded-jobs");
+
+  if (missedJobs.length === 0) {
+    section.innerHTML = "";
+    return;
+  }
+
+  section.innerHTML = `
+    <details style="
+      background:#fff3cd;
+      padding:15px;
+      border-radius:12px;
+      margin-top:20px;
+      text-align:left;
+    ">
+      <summary>
+        📂 검색 범위 확장으로 발견한 공고
+        (${missedJobs.length}건)
+      </summary>
+
+      ${missedJobs.map(job => `
+        <hr>
+        <p>🏥 ${job.name}</p>
+        <p>📍 ${job.distance}km</p>
+        <p>📅 ${job.days}</p>
+      `).join("")}
+    </details>
+  `;
+}
+
+document.getElementById("radius")
+  .addEventListener("change", showExpandedJobs);
+
+showExpandedJobs();
+</script>
 </body>
 </html>
