@@ -1,0 +1,12 @@
+name: Nurse Alert Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test Nurse Alert
+        run: echo "Nurse Alert 자동 실행 테스트 성공!"
