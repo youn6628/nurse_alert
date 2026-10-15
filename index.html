@@ -147,5 +147,85 @@ document.getElementById("radius")
 
 showExpandedJobs();
 </script>
+
+<hr>
+
+<h2>☁️ Cloudflare DB 채용공고</h2>
+
+<div id="server-jobs">
+  채용공고를 불러오는 중...
+</div>
+
+<script>
+async function loadServerJobs() {
+
+  const container = document.getElementById("server-jobs");
+
+  try {
+
+    const response = await fetch(
+      "https://nurse-alert-checker.youn6628.workers.dev"
+    );
+
+    if (!response.ok) {
+      throw new Error("서버 응답 오류: " + response.status);
+    }
+
+    const jobs = await response.json();
+
+    container.innerHTML = "";
+
+    if (jobs.length === 0) {
+      container.textContent = "저장된 공고가 없습니다.";
+      return;
+    }
+
+    jobs.forEach(job => {
+
+      const card = document.createElement("div");
+
+      card.style.cssText = `
+        background:white;
+        padding:15px;
+        margin:10px 0;
+        border-radius:10px;
+        text-align:left;
+      `;
+
+      const hospital = document.createElement("h3");
+      hospital.textContent = "🏥 " + job.hospital;
+
+      const title = document.createElement("p");
+      title.textContent = job.title;
+
+      const schedule = document.createElement("p");
+      schedule.textContent = "📅 " + job.schedule_text;
+
+      const link = document.createElement("a");
+      link.textContent = "🔗 채용공고 바로가기";
+
+      if (job.url && /^https?:\/\//i.test(job.url)) {
+        link.href = job.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+
+      card.append(hospital, title, schedule, link);
+      container.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    container.textContent =
+      "❌ 채용공고를 불러오지 못했습니다: " + error.message;
+
+  }
+
+}
+
+loadServerJobs();
+</script>
+
 </body>
 </html>
