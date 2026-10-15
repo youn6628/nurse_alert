@@ -75,7 +75,10 @@
     const radius = Number(document.getElementById("radius").value);
     const jobList = document.getElementById("job-list");
 
-    const filteredJobs = jobs.filter(job => job.distance <= radius);
+    const filteredJobs = jobs.filter(job =>
+  job.distance <= radius &&
+  isWeekdayTwice(job.days)
+);
 
     jobList.innerHTML = filteredJobs.map(job => `
       <div style="
@@ -104,9 +107,10 @@ function showExpandedJobs() {
   const previous = Number(localStorage.getItem("oldRadius") || current);
 
   const missedJobs = jobs.filter(job =>
-    job.distance > previous &&
-    job.distance <= current
-  );
+  job.distance > previous &&
+  job.distance <= current &&
+  isWeekdayTwice(job.days)
+);
 
   const section = document.getElementById("expanded-jobs");
 
