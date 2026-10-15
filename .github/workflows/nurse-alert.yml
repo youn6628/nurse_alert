@@ -3,7 +3,7 @@ name: Nurse Alert Test
 on:
   workflow_dispatch:
   schedule:
-    - cron: '7,37 * * * *'
+  - cron: '3/5 * * * *'
 
 jobs:
   test:
