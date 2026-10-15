@@ -40,7 +40,42 @@
 
   <h2>🔔 신규 채용공고</h2>
 
-  <p>아직 등록된 공고가 없습니다.</p>
+  <div id="job-list"></div>
+
+<script>
+  // 테스트용 가상 채용공고
+  const jobs = [
+    { name: "가상 A병원", distance: 8, days: "월/수" },
+    { name: "가상 B병원", distance: 18, days: "화/목" },
+    { name: "가상 C병원", distance: 25, days: "월/금" },
+    { name: "가상 D병원", distance: 35, days: "수/목" }
+  ];
+
+  function showJobs() {
+    const radius = Number(document.getElementById("radius").value);
+    const jobList = document.getElementById("job-list");
+
+    const filteredJobs = jobs.filter(job => job.distance <= radius);
+
+    jobList.innerHTML = filteredJobs.map(job => `
+      <div style="
+        background:white;
+        padding:15px;
+        margin:10px 0;
+        border-radius:10px;
+        text-align:left;
+      ">
+        <h3>🏥 ${job.name}</h3>
+        <p>📍 집에서 ${job.distance}km</p>
+        <p>📅 근무요일: ${job.days}</p>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("radius").addEventListener("change", showJobs);
+
+  showJobs();
+</script>
 
 </body>
 </html>
