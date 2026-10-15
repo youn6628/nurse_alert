@@ -31,8 +31,17 @@
   radius.value = localStorage.getItem("radius") || "20";
 
   function saveRadius() {
-    localStorage.setItem("radius", radius.value);
+  const oldRadius = Number(localStorage.getItem("radius") || 20);
+  const newRadius = Number(radius.value);
+
+  if (newRadius > oldRadius) {
+    localStorage.setItem("oldRadius", oldRadius);
+  } else {
+    localStorage.removeItem("oldRadius");
   }
+
+  localStorage.setItem("radius", newRadius);
+}
 </script>
   <p>📅 근무조건: 평일 주 2일</p>
 
