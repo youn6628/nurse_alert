@@ -225,6 +225,71 @@ const response = await fetch(
       container.appendChild(card);
 
     });
+// 검색 범위 확장으로 발견한 DB 공고
+const oldRadius = Number(localStorage.getItem("oldRadius"));
+const expandedAt = localStorage.getItem("expandedAt");
+
+if (expandedAt && oldRadius > 0) {
+
+  const missedJobs = jobs.filter(job => {
+
+    if (!job.first_seen_at) return false;
+
+    // DB의 최초 발견 시간은 UTC 기준
+    const firstSeen = new Date(
+      job.first_seen_at.replace(" ", "T") + "Z"
+    );
+
+    return (
+      job.distance > oldRadius &&
+      firstSeen.getTime() < new Date(expandedAt).getTime()
+    );
+
+  });
+
+  if (missedJobs.length > 0) {
+
+    const section = document.createElement("details");
+
+    section.style.cssText = `
+      background:#fff3cd;
+      padding:15px;
+      margin-top:20px;
+      border-radius:12px;
+      text-align:left;
+    `;
+
+    const summary = document.createElement("summary");
+
+    summary.textContent =
+      `📂 검색 범위 확장으로 발견한 DB 공고 (${missedJobs.length}건)`;
+
+    section.appendChild(summary);
+
+    missedJobs.forEach(job => {
+
+      const p = document.createElement("p");
+
+      p.textContent =
+        `🏥 ${job.hospital} / 📍 ${job.distance}km`;
+
+      section.appendChild(p);
+
+      if (job.url && /^https?:\/\//i.test(job.url)) {
+        const link = document.createElement("a");
+        link.textContent = "🔗 공고 바로가기";
+        link.href = job.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        section.appendChild(link);
+      }
+
+    });
+
+    container.appendChild(section);
+
+  }
+}
 
   } catch (error) {
 
