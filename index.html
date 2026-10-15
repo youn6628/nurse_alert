@@ -355,5 +355,49 @@ document.getElementById("enable-notifications")
 
   });
 </script>
+
+<hr>
+
+<h2>🧪 알림 테스트</h2>
+
+<button id="test-notification"
+  style="padding:15px; font-size:18px;
+         background:#16a34a; color:white;
+         border:0; border-radius:10px;">
+  🔔 테스트 알림 보내기
+</button>
+
+<p id="test-status"></p>
+
+<script>
+document.getElementById("test-notification")
+  .addEventListener("click", async () => {
+
+    const status = document.getElementById("test-status");
+
+    try {
+      if (Notification.permission !== "granted") {
+        status.textContent = "❌ 알림 권한이 필요합니다.";
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.ready;
+
+      await registration.showNotification("🏥 Nurse Alert", {
+        body: "새로운 간호사 채용공고 발견!\n📍 12.5km\n📅 평일 주 2일",
+        icon: "./favicon.ico",
+        data: {
+          url: window.location.href
+        }
+      });
+
+      status.textContent = "✅ 테스트 알림 전송 성공!";
+
+    } catch (error) {
+      status.textContent = "❌ 오류: " + error.message;
+    }
+
+  });
+</script>
 </body>
 </html>
