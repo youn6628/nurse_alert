@@ -545,10 +545,11 @@ document.getElementById("save-push")
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            code: code,
-            subscription: subscription.toJSON()
-          })
+body: JSON.stringify({
+  code: code,
+  subscription: subscription.toJSON(),
+  radiusKm: Number(document.getElementById("radius").value)
+})
         }
       );
 
